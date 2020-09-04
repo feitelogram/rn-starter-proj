@@ -1,17 +1,21 @@
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import SearchScreen from './src/screens/SearchScreen';
+import ResultsShowScreen from './src/screens/ResultsShowScreen';
+import React from 'react';
+import { RootStackParamList } from './src/types/navigation';
 
-const navigator = createStackNavigator(
-  {
-    Search: SearchScreen,
-  },
-  {
-    initialRouteName: 'Search',
-    defaultNavigationOptions: {
-      title: 'Business Search',
-    },
-  }
-);
+const Stack = createStackNavigator<RootStackParamList>();
 
-export default createAppContainer(navigator);
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='Search'>
+        <Stack.Screen name='Search' component={SearchScreen} />
+        <Stack.Screen name='Show' component={ResultsShowScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default App;

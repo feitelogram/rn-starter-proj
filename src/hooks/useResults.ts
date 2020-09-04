@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import yelp from '../api/yelp';
+import { YelpResult } from '../types/YelpResult';
 
 export default () => {
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState([] as YelpResult[]);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    searchApi('jerk chicken');
+    searchApi('Italian');
   }, []);
 
   const searchApi = async (term: string): Promise<void> => {
@@ -15,16 +16,21 @@ export default () => {
         params: {
           term,
           location: 'Brooklyn',
+          limit: 50,
         },
       });
       setErrorMessage('');
-      setResults(resp.data.businesses);
+      return setResults(resp.data.businesses);
     } catch (e) {
-      setErrorMessage(
+      return setErrorMessage(
         'Search is currently not available. Please check your connection or try later.'
       );
     }
   };
 
-  return [searchApi, results, errorMessage];
+  return [searchApi, results, errorMessage] as [
+    (term: string) => Promise<void>,
+    YelpResult[],
+    string
+  ];
 };
